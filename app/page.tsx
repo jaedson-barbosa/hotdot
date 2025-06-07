@@ -3,6 +3,8 @@ import { SignIn } from "../components/signin-button";
 import { auth } from "@/auth";
 import { SignOut } from "@/components/signout-button";
 import { PropsWithChildren } from "react";
+import { Text } from "@/components/design/text";
+import { fontFamilies } from "@/utils/fonts";
 
 export default async function Home() {
   const session = await auth();
@@ -22,7 +24,14 @@ export default async function Home() {
         {session ? <SignOut /> : <SignIn />}
       </header>
       <main className="row-start-2 w-full h-full">
-        <canvas className="bg-zinc-100 dark:bg-zinc-900 w-full h-full" />
+        <div className="w-full h-full">
+          <Text
+            align="center"
+            font={fontFamilies.values().next().value!}
+            text="This is just a test, This is just a test"
+            width={384}
+          />
+        </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <BottomButton>
