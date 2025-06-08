@@ -5,7 +5,7 @@ import { imageDataToBMP } from "./image-data-to-bmp";
 export type TextAlign = "left" | "center" | "right";
 
 function writeText(
-  imageData: Uint8ClampedArray,
+  imageData: number[],
   font: Font,
   lineHeight: number,
   scale: 1 | 2,
@@ -132,8 +132,7 @@ export interface TextProps {
 }
 
 export const renderTextToImage = (props: TextProps) => {
-  const imageData = new Uint8ClampedArray(props.width * 100);
-  imageData.fill(255);
+  const imageData: number[] = [];
   const font = props.font.font;
   const height = writeText(
     imageData,

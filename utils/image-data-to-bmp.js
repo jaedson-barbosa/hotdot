@@ -1,6 +1,6 @@
 /**
- * Convert RGBA image data (Uint8ClampedArray) to a 1-bit BMP (Base64 string)
- * @param {Uint8ClampedArray} imageData RGBA data from canvas.getImageData().data
+ * Convert RGBA image data (number[]) to a 1-bit BMP (Base64 string)
+ * @param {number[]} imageData RGBA data from canvas.getImageData().data
  * @param {number} width
  * @param {number} height
  * @returns {string} .bmp file as Base64 string
@@ -14,8 +14,8 @@ export function imageDataToBMP(imageData, width, height) {
 }
 
 /**
- * Convert RGBA image data (Uint8ClampedArray) to a 1-bit BMP (ArrayBuffer)
- * @param {Uint8ClampedArray} imageData
+ * Convert RGBA image data (number[]) to a 1-bit BMP (ArrayBuffer)
+ * @param {number[]} imageData
  * @param {number} width
  * @param {number} height
  * @returns {ArrayBuffer} .BMP file as ArrayBuffer
@@ -75,10 +75,10 @@ function imageTo1BitBMP(imageData, width, height) {
     for (var x = 0; x < width; x++) {
       // Read RGBA for 1 pixel
       var i = (y * width + x) * 4;
-      var r = imageData[i],
-        g = imageData[i + 1],
-        b = imageData[i + 2],
-        a = imageData[i + 3];
+      var r = imageData[i] ?? 255,
+        g = imageData[i + 1] ?? 255,
+        b = imageData[i + 2] ?? 255,
+        a = imageData[i + 3] ?? 255;
 
       // Luminance threshold (>=128 is white, else black)
       var luminance = 0.299 * r + 0.587 * g + 0.114 * b;
