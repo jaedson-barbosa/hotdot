@@ -12,6 +12,7 @@ import {
 import type { AdapterAccountType } from "next-auth/adapters";
 import { nanoid } from "nanoid";
 import { relations } from "drizzle-orm";
+import { fontNames } from "@/utils/font-names";
 
 export const users = pgTable("user", {
   id: text("id")
@@ -121,41 +122,7 @@ export const printsRelations = relations(prints, ({ many, one }) => ({
   }),
 }));
 
-export const fontEnum = pgEnum("font", [
-  "Boxxy - 14",
-  "Cherry - 10",
-  "Cherry - 11",
-  "Cherry - 13",
-  "Ctrld - 10",
-  "Ctrld - 13",
-  "Ctrld - 16",
-  "Dina - 10",
-  "Dina - 12",
-  "Dina - 13",
-  "Dylex - 10",
-  "Dylex - 13",
-  "Dylex - 20",
-  "Gohufont - 11",
-  "Gohufont - 14",
-  "Kakwa - 12",
-  "Lokaltog - 10",
-  "Lokaltog - 12",
-  "MPlus - 10",
-  "MPlus - 12",
-  "Orp - 12",
-  "Scientifica - 11",
-  "Sq - 15",
-  "Terminus - 14",
-  "Terminus - 16",
-  "Terminus - 18",
-  "Terminus - 20",
-  "Terminus - 22",
-  "Terminus - 24",
-  "Terminus - 28",
-  "Terminus - 32",
-  "Tewi - 11",
-  "Triskweline - 13",
-]);
+export const fontEnum = pgEnum("font", fontNames as [string, ...string[]]);
 
 export const alignEnum = pgEnum("align", ["left", "center", "right"]);
 
@@ -184,3 +151,6 @@ export const texts = pgTable("text", {
   font: fontEnum().notNull(),
   align: alignEnum().notNull(),
 });
+
+export type TextInsert = Omit<typeof texts.$inferInsert, "id">;
+export type TextSelect = typeof texts.$inferSelect;

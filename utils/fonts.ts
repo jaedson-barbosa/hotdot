@@ -9,7 +9,7 @@ export interface FontFamily {
 export const fontFamilies = new Map<string, FontFamily>(
   Object.entries(Fonts).flatMap(([name, fonts]) =>
     Object.entries(fonts).map(([size, font]) => [
-      `${name} (${size})`,
+      `${name} - ${size}`,
       { name, size: +size, font },
     ])
   )

@@ -9,11 +9,11 @@ export const db = drizzle({
 });
 
 export async function dbCreatePrint(authorId: string | undefined) {
-  const [{ id }] = await db
+  const [{ printId }] = await db
     .insert(schema.prints)
     .values({ authorId })
-    .returning();
-  return id;
+    .returning({ printId: schema.prints.id });
+  return printId;
 }
 
 export async function dbReadPrint(id: string) {

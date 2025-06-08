@@ -6,16 +6,17 @@ import { SignOut } from "@/components/signout-button";
 import { PropsWithChildren } from "react";
 import { Text } from "@/components/design/text";
 import { fontFamilies } from "@/utils/fonts";
+import Link from "next/link";
 
 export default async function Page({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ printId: string }>;
 }) {
   const session = await auth();
-  const { id } = await params;
-  const doc = await dbReadPrint(id);
-
+  const { printId } = await params;
+  const doc = await dbReadPrint(printId);
+console.log(doc)
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-12 gap-12 font-[family-name:var(--font-geist-sans)]">
       <header className="flex w-full max-w-lg justify-between items-center">
@@ -32,18 +33,27 @@ export default async function Page({
       </header>
       <main className="row-start-2 w-full max-w-lg h-full">
         <div className="w-full h-full">
-          <Text
-            align="center"
-            font={fontFamilies.values().next().value!}
-            text="This is just a test, This is just a test"
-            width={384}
-          />
+          {doc?.sections.map((section) => {
+            const text = section.text;
+            if (!text) return null;
+            const font = fontFamilies.get(text.font);
+            if (!font) return null;
+            return (
+              <Text
+                key={text.id}
+                align={text.align}
+                font={font}
+                text={text.text}
+                width={doc.width}
+              />
+            );
+          })}
           <div className="flex gap-[24px] mt-8 justify-center">
-            <BottomButton>
+            <BottomButton href={`/${printId}/text/add`}>
               <Type size={16} color="#666" />
               Add text
             </BottomButton>
-            <BottomButton>
+            <BottomButton href={`/${printId}/image/add`}>
               <Image size={16} color="#666" />
               Add image
             </BottomButton>
@@ -51,25 +61,26 @@ export default async function Page({
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <BottomButton>
+        <BottomButton href="./">
           <Printer size={16} color="#666" />
           Select device
         </BottomButton>
         {session && (
-          <BottomButton>
+          <BottomButton href="./">
             <Save size={16} color="#666" />
             Save
           </BottomButton>
         )}
       </footer>
-      <pre>{JSON.stringify(doc)}</pre>
     </div>
   );
 }
 
-const BottomButton = (props: PropsWithChildren<{ onClick?: () => void }>) => {
+const BottomButton = (
+  props: PropsWithChildren<{ onClick?: () => void; href: string }>
+) => {
   return (
-    <button
+    <Link
       className="flex items-center gap-2 hover:underline hover:underline-offset-4"
       {...props}
     />
