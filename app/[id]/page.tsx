@@ -14,7 +14,7 @@ export default async function Page({
 }) {
   const session = await auth();
   const { id } = await params;
-  // const doc = await dbReadPrint(id);
+  const doc = await dbReadPrint(id);
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-12 gap-12 font-[family-name:var(--font-geist-sans)]">
@@ -62,7 +62,7 @@ export default async function Page({
           </BottomButton>
         )}
       </footer>
-      <pre>{JSON.stringify(id)}</pre>
+      <pre>{JSON.stringify(doc)}</pre>
     </div>
   );
 }

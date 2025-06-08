@@ -1,7 +1,7 @@
 import { SignIn } from "@/components/signin-button";
-import { createPrintAndRedirect } from "../actions";
+import { createPrintAndRedirect } from "@/actions";
 
-export default async function Page() {
+export async function Welcome() {
   return (
     <>
       <p>I'm a guest!</p>

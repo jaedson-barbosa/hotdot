@@ -1,7 +1,7 @@
 import { SignOut } from "@/components/signout-button";
-import { createPrintAndRedirect } from "../actions";
+import { createPrintAndRedirect } from "@/actions";
 
-export default async function Page() {
+export async function History() {
   return (
     <>
       <p>I'm authenticated!</p>
