@@ -5,13 +5,18 @@ import {
   text,
   primaryKey,
   integer,
+  smallint,
+  pgEnum,
+  serial,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
+import { nanoid } from "nanoid";
+import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => nanoid(12)),
   name: text("name"),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
@@ -90,3 +95,92 @@ export const authenticators = pgTable(
     },
   ]
 );
+
+export const usersRelations = relations(users, ({ many }) => ({
+  prints: many(prints),
+}));
+
+export const prints = pgTable("print", {
+  id: text()
+    .primaryKey()
+    .$defaultFn(() => nanoid(12)),
+  width: smallint().notNull().default(384),
+  authorId: text().references(() => users.id),
+  title: text(),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp({ mode: "date", precision: 0 }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const printsRelations = relations(prints, ({ many, one }) => ({
+  sections: many(sections),
+  author: one(users, {
+    fields: [prints.authorId],
+    references: [users.id],
+  }),
+}));
+
+export const fontEnum = pgEnum("font", [
+  "Boxxy - 14",
+  "Cherry - 10",
+  "Cherry - 11",
+  "Cherry - 13",
+  "Ctrld - 10",
+  "Ctrld - 13",
+  "Ctrld - 16",
+  "Dina - 10",
+  "Dina - 12",
+  "Dina - 13",
+  "Dylex - 10",
+  "Dylex - 13",
+  "Dylex - 20",
+  "Gohufont - 11",
+  "Gohufont - 14",
+  "Kakwa - 12",
+  "Lokaltog - 10",
+  "Lokaltog - 12",
+  "MPlus - 10",
+  "MPlus - 12",
+  "Orp - 12",
+  "Scientifica - 11",
+  "Sq - 15",
+  "Terminus - 14",
+  "Terminus - 16",
+  "Terminus - 18",
+  "Terminus - 20",
+  "Terminus - 22",
+  "Terminus - 24",
+  "Terminus - 28",
+  "Terminus - 32",
+  "Tewi - 11",
+  "Triskweline - 13",
+]);
+
+export const alignEnum = pgEnum("align", ["left", "center", "right"]);
+
+export const sections = pgTable("section", {
+  id: serial().primaryKey(),
+  textId: integer().references(() => texts.id, { onDelete: "cascade" }),
+  printId: text()
+    .references(() => prints.id)
+    .notNull(),
+});
+
+export const sectionsRelations = relations(sections, ({ one }) => ({
+  text: one(texts, {
+    fields: [sections.textId],
+    references: [texts.id],
+  }),
+  print: one(prints, {
+    fields: [sections.printId],
+    references: [prints.id],
+  }),
+}));
+
+export const texts = pgTable("text", {
+  id: serial().primaryKey(),
+  text: text().notNull(),
+  font: fontEnum().notNull(),
+  align: alignEnum().notNull(),
+});

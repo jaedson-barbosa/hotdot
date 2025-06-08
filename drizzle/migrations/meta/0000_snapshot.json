@@ -1,5 +1,5 @@
 {
-  "id": "a822827c-2911-422a-a072-0bdbc2be9f44",
+  "id": "972f5688-c334-4386-91ba-2a334d7f6a40",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -180,6 +180,129 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.print": {
+      "name": "print",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "width": {
+          "name": "width",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 384
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp (0)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "print_author_id_user_id_fk": {
+          "name": "print_author_id_user_id_fk",
+          "tableFrom": "print",
+          "tableTo": "user",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.section": {
+      "name": "section",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "text_id": {
+          "name": "text_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "print_id": {
+          "name": "print_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "section_text_id_text_id_fk": {
+          "name": "section_text_id_text_id_fk",
+          "tableFrom": "section",
+          "tableTo": "text",
+          "columnsFrom": [
+            "text_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "section_print_id_print_id_fk": {
+          "name": "section_print_id_print_id_fk",
+          "tableFrom": "section",
+          "tableTo": "print",
+          "columnsFrom": [
+            "print_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.session": {
       "name": "session",
       "schema": "",
@@ -219,6 +342,45 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.text": {
+      "name": "text",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "font": {
+          "name": "font",
+          "type": "font",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "align": {
+          "name": "align",
+          "type": "align",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -308,7 +470,56 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.align": {
+      "name": "align",
+      "schema": "public",
+      "values": [
+        "left",
+        "center",
+        "right"
+      ]
+    },
+    "public.font": {
+      "name": "font",
+      "schema": "public",
+      "values": [
+        "Boxxy - 14",
+        "Cherry - 10",
+        "Cherry - 11",
+        "Cherry - 13",
+        "Ctrld - 10",
+        "Ctrld - 13",
+        "Ctrld - 16",
+        "Dina - 10",
+        "Dina - 12",
+        "Dina - 13",
+        "Dylex - 10",
+        "Dylex - 13",
+        "Dylex - 20",
+        "Gohufont - 11",
+        "Gohufont - 14",
+        "Kakwa - 12",
+        "Lokaltog - 10",
+        "Lokaltog - 12",
+        "MPlus - 10",
+        "MPlus - 12",
+        "Orp - 12",
+        "Scientifica - 11",
+        "Sq - 15",
+        "Terminus - 14",
+        "Terminus - 16",
+        "Terminus - 18",
+        "Terminus - 20",
+        "Terminus - 22",
+        "Terminus - 24",
+        "Terminus - 28",
+        "Terminus - 32",
+        "Tewi - 11",
+        "Triskweline - 13"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

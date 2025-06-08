@@ -1,12 +1,26 @@
 /**
+ * Convert RGBA image data (Uint8ClampedArray) to a 1-bit BMP (Base64 string)
+ * @param {Uint8ClampedArray} imageData RGBA data from canvas.getImageData().data
+ * @param {number} width
+ * @param {number} height
+ * @returns {string} .bmp file as Base64 string
+ */
+export function imageDataToBMP(imageData, width, height) {
+  const fixedHeight = Math.ceil(1 + (height + 1) / 8) * 8;
+  const bmpData = imageTo1BitBMP(imageData, width, fixedHeight);
+  const base64String = btoa(String.fromCharCode(...new Uint8Array(bmpData)));
+  const url = "data:image/bmp;base64," + base64String;
+  return url;
+}
+
+/**
  * Convert RGBA image data (Uint8ClampedArray) to a 1-bit BMP (ArrayBuffer)
- * @param {Uint8ClampedArray} imageData - RGBA data from canvas.getImageData().data
+ * @param {Uint8ClampedArray} imageData
  * @param {number} width
  * @param {number} height
  * @returns {ArrayBuffer} .BMP file as ArrayBuffer
  */
-
-export function imageTo1BitBMP(imageData, width, height) {
+function imageTo1BitBMP(imageData, width, height) {
   // BMP header sizes
   var FILE_HEADER_SIZE = 14;
   var INFO_HEADER_SIZE = 40;

@@ -1,8 +1,10 @@
 import type { Font } from "bdf-fonts";
+import { FontFamily } from "./fonts";
+import { imageDataToBMP } from "./image-data-to-bmp";
 
 export type TextAlign = "left" | "center" | "right";
 
-export function writeText(
+function writeText(
   imageData: Uint8ClampedArray,
   font: Font,
   lineHeight: number,
@@ -120,3 +122,30 @@ export function writeText(
   writeLine(line, getX(), y);
   return y;
 }
+
+export interface TextProps {
+  text: string;
+  font: FontFamily;
+  width: number;
+  align: TextAlign;
+  bold?: boolean;
+}
+
+export const renderTextToImage = (props: TextProps) => {
+  const imageData = new Uint8ClampedArray(props.width * 100);
+  imageData.fill(255);
+  const font = props.font.font;
+  const height = writeText(
+    imageData,
+    props.bold ? font.bold : font.regular,
+    props.font.size,
+    1,
+    props.text,
+    0,
+    0,
+    props.width,
+    props.align
+  );
+  const url = imageDataToBMP(imageData, props.width, height);
+  return url;
+};
