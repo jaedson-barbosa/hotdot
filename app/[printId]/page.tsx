@@ -1,4 +1,4 @@
-import { dbReadPrint } from "@/drizzle";
+import { getPrint } from "@/data/get-print";
 import { Image, Printer, Save, Type } from "lucide-react";
 import { SignIn } from "@/components/signin-button";
 import { auth } from "@/auth";
@@ -15,7 +15,7 @@ export default async function Page({
 }) {
   const session = await auth();
   const { printId } = await params;
-  const doc = await dbReadPrint(printId);
+  const doc = await getPrint(printId);
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-12 gap-12 font-[family-name:var(--font-geist-sans)]">
@@ -39,13 +39,14 @@ export default async function Page({
             const font = fontFamilies.get(text.font);
             if (!font) return null;
             return (
-              <Text
-                key={text.id}
-                align={text.align}
-                font={font}
-                text={text.text}
-                width={doc.width}
-              />
+              <Link key={text.id} href={`/${printId}/text/${text.id}`}>
+                <Text
+                  align={text.align}
+                  font={font}
+                  text={text.text}
+                  width={doc.width}
+                />
+              </Link>
             );
           })}
           <div className="flex gap-[24px] mt-8 justify-center">

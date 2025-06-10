@@ -1,4 +1,4 @@
-import { addText } from "@/actions";
+import { saveText } from "@/actions";
 import { fontNames } from "@/utils/font-names";
 
 export default async function ({
@@ -9,7 +9,7 @@ export default async function ({
   const { printId } = await params;
 
   return (
-    <form action={addText} className="flex flex-col gap-2 max-w-lg mx-auto">
+    <form action={saveText} className="flex flex-col gap-2 max-w-lg mx-auto">
       <input type="hidden" name="printId" value={printId} />
       <label htmlFor="align">Align</label>
       <select name="align" id="align" required>
